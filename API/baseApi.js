@@ -10,7 +10,7 @@ $.ajaxPrefilter(function(options) {
     options.complete = function(res) {
         if (res.responseJSON.status === 1 && res.responseJSON.message === '身份认证失败！') {
             localStorage.removeItem('token')
-            location.href = '../html/login.html'
+            location.href = 'http://127.0.0.1:5500/html/login.html'
         }
     }
 })
