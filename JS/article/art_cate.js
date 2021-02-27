@@ -97,22 +97,21 @@ $('tbody').on('click', '.btn-delete', function() {
     })
 })
 
-setInterval(function() {
-    $('.btn-delete').each(function(index, ele) {
-        let flag = $(ele).parent().prev().html()
-        if (flag == '定时删除时间较长' || flag == '避免信息太多看不到自己的') { return }
-        // console.log('$(ele).parent().prev(): ', $(ele).parent().prev());
-        var id = $(ele).attr('data-id')
-        $.ajax({
-            method: 'GET',
-            url: '/my/article/deletecate/' + id,
-            success: function(res) {
-                if (res.status !== 0) {
-                    return layer.msg('删除分类失败！')
-                }
-                layer.msg('删除分类成功！')
-                initArtCateList()
-            }
-        })
-    })
-}, 50000)
+// setInterval(function() {
+//     $('.btn-delete').each(function(index, ele) {
+//         let flag = $(ele).parent().prev().html()
+//         if (flag == '定时删除时间较长' || flag == '避免信息太多看不到自己的') { return }
+//         var id = $(ele).attr('data-id')
+//         $.ajax({
+//             method: 'GET',
+//             url: '/my/article/deletecate/' + id,
+//             success: function(res) {
+//                 if (res.status !== 0) {
+//                     return layer.msg('删除分类失败！')
+//                 }
+//                 layer.msg('删除分类成功！')
+//                 initArtCateList()
+//             }
+//         })
+//     })
+// }, 50000)
