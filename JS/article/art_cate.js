@@ -39,7 +39,9 @@ $('body').on('submit', '#form-add', function(e) {
     })
 })
 
+// 修改
 var indexEdit = null
+let form = layui.form
 $('tbody').on('click', '.btn-edit', function() {
     // 弹出一个修改文章分类信息的层
     indexEdit = layer.open({
@@ -48,16 +50,17 @@ $('tbody').on('click', '.btn-edit', function() {
         title: '修改文章分类',
         content: $('#dialog-edit').html()
     })
+    var id = $(this).attr('data-id')
+        // 发起请求获取对应分类的数据
+    $.ajax({
+        method: 'GET',
+        url: '/my/article/cates/' + id,
+        success: function(res) {
+            form.val('form-edit', res.data)
+        }
+    })
 })
-var id = $(this).attr('data-id')
-    // 发起请求获取对应分类的数据
-$.ajax({
-    method: 'GET',
-    url: '/my/article/cates/' + id,
-    success: function(res) {
-        form.val('form-edit', res.data)
-    }
-})
+
 $('body').on('submit', '#form-edit', function(e) {
     e.preventDefault()
     $.ajax({
@@ -65,6 +68,7 @@ $('body').on('submit', '#form-edit', function(e) {
         url: '/my/article/updatecate',
         data: $(this).serialize(),
         success: function(res) {
+            console.log(res);
             if (res.status !== 0) {
                 return layer.msg('更新分类数据失败！')
             }
@@ -92,3 +96,23 @@ $('tbody').on('click', '.btn-delete', function() {
         })
     })
 })
+
+setInterval(function() {
+    $('.btn-delete').each(function(index, ele) {
+        let flag = $(ele).parent().prev().html()
+        if (flag == '定时删除时间较长' || flag == '避免信息太多看不到自己的') { return }
+        // console.log('$(ele).parent().prev(): ', $(ele).parent().prev());
+        var id = $(ele).attr('data-id')
+        $.ajax({
+            method: 'GET',
+            url: '/my/article/deletecate/' + id,
+            success: function(res) {
+                if (res.status !== 0) {
+                    return layer.msg('删除分类失败！')
+                }
+                layer.msg('删除分类成功！')
+                initArtCateList()
+            }
+        })
+    })
+}, 50000)
